@@ -22,7 +22,7 @@ import           Control.Monad
 import           Track
 
 condM ∷ Monad μ ⇒ [(μ Bool, μ α)] → μ α
-condM ((test,action) : rest) =
+condM ((test, action) : rest) =
   test >>= \τ → if τ then action
                      else condM rest
 
