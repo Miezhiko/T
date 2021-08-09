@@ -1,0 +1,8 @@
+dist
+*.o
+*.exe
+*.hi
+*.chi
+*.chs.h
+*.lock
+.stack-work/

@@ -1,0 +1,31 @@
+name: T
+version: 0.0.1
+license: AGPL3
+
+build-type: Simple
+cabal-version: >= 1.6
+
+Executable    t
+  Main-Is:    T.hs
+  Other-Modules:
+    Version
+    Track
+    IO
+    Time
+    Helper
+    Tracker
+    Paths_T
+  Hs-Source-Dirs: src
+  Build-Depends:
+      base >= 4
+    , base-unicode-symbols
+    , time
+    , MissingH
+    , lifted-base
+    , bytestring
+    , utf8-string
+    , directory
+    , filepath
+    , executable-path
+    , yaml
+    , aeson
