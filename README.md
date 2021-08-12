@@ -14,3 +14,6 @@ Usage: t [optional things]
   -f Int  --finish=Int  finish task
   -F                    finish all tasks (in case you've forgot starting)
 ```
+
+![alt text](https://github.com/Miezhiko/T/blob/mawa/resources/ldwn.png?raw=true
+
