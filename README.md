@@ -15,5 +15,5 @@ Usage: t [optional things]
   -F                    finish all tasks (in case you've forgot starting)
 ```
 
-![alt text](https://github.com/Miezhiko/T/blob/mawa/resources/ldwn.png?raw=true
+![aww](https://github.com/Miezhiko/T/blob/mawa/resources/ldwn.png?raw=true)
 
