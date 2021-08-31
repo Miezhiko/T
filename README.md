@@ -1,3 +1,5 @@
+[![GitHub](https://github.com/Miezhiko/T/workflows/CI/badge.svg?branch=mawa)](https://github.com/Miezhiko/T/workflows/CI)
+
 # T
 time tracker
 
