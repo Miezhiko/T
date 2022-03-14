@@ -55,7 +55,7 @@ iterateTasks action = do
 
 trackTask ∷ Int → IO ()
 trackTask η = do
-  c1 ← getCurrentTime
+  c1 ← getZonedTime
   let dateString = show c1
   putStrLn dateString
   if η /= 0
@@ -74,8 +74,8 @@ pauseT (t,p) = do
   case trackYaml of
     Nothing    → exitFailure
     Just yaml  → do
-      pauseDate ← getCurrentTime
-      let startDate = read $ start yaml :: UTCTime
+      pauseDate ← getZonedTime
+      let startDate = read $ start yaml :: ZonedTime
           currentTracked = fromMaybe "0" (tracked yaml)
           currentTime = read currentTracked :: Int
       difft ← diffTime startDate
@@ -95,7 +95,7 @@ resumeT (t,p) = do
   case trackYaml of
     Nothing    → exitFailure
     Just yaml  → do
-      resumeDate ← getCurrentTime
+      resumeDate ← getZonedTime
       let resumeString = show resumeDate
           trackStart =
             yaml { pause = Nothing
@@ -120,8 +120,8 @@ getTotalTracked cfg = do
          case tracked cfg of
            Just t  → read t :: Int
            Nothing → 0
-       c1 ∷ UTCTime
-       c1 = read startDate :: UTCTime
+       c1 ∷ ZonedTime
+       c1 = read startDate :: ZonedTime
 
 finishT ∷ Bool → (String, String) → IO ()
 finishT remove (t,p) = do

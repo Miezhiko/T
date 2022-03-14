@@ -18,10 +18,10 @@ import           System.Exit
 import           System.IO
 import           System.Time.Utils (renderSecs)
 
-diffTime ∷ UTCTime → IO NominalDiffTime
+diffTime ∷ ZonedTime → IO NominalDiffTime
 diffTime c1 = do
   c2 ← getCurrentTime
-  return $ diffUTCTime c2 c1
+  return $ diffUTCTime c2 (zonedTimeToUTC c1)
 
 humanReadableTimeDiff ∷ NominalDiffTime → String
 humanReadableTimeDiff = helper
