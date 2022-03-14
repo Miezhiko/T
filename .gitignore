@@ -1,4 +1,4 @@
-dist
+dist*
 *.o
 *.exe
 *.hi
@@ -6,3 +6,4 @@ dist
 *.chs.h
 *.lock
 .stack-work/
+hake

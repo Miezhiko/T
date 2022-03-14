@@ -54,4 +54,4 @@ extra-deps:
 - comonad-5.0.8
 - distributive-0.6.2.1
 - indexed-traversable-0.1.1
-resolver: ghc-8
+resolver: ghc-9

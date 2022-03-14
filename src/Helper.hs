@@ -22,12 +22,14 @@ import           Control.Monad
 import           Track
 
 condM ∷ Monad μ ⇒ [(μ Bool, μ α)] → μ α
+condM [] = error "condM: no matching conditions"
 condM ((test, action) : rest) =
   test >>= \τ → if τ then action
                      else condM rest
 
 getWorkDir ∷ IO FilePath
 getWorkDir =
+  {- HLINT ignore "Redundant multi-way if" -}
   if | os ∈ ["win32", "mingw32", "cygwin32"] →
         (takeDirectory <$> getExecutablePath)
      | otherwise → getHomeDirectory

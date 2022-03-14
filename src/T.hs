@@ -1,6 +1,4 @@
 {-# LANGUAGE KindSignatures #-}
-{-# LANGUAGE LambdaCase     #-}
-{-# LANGUAGE MultiWayIf     #-}
 {-# LANGUAGE RankNTypes     #-}
 {-# LANGUAGE UnicodeSyntax  #-}
 
