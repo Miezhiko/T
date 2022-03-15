@@ -3,8 +3,6 @@
 
 import Hake
 
-import Data.String.Utils (rstrip)
-
 main ∷ IO ()
 main = hake $ do
   "clean | clean the project" ∫
@@ -14,14 +12,9 @@ main = hake $ do
     cabal ["install", "--only-dependencies", "--overwrite-policy=always"]
     cabal ["configure"]
     cabal ["build"]
-    (exitCode, stdOut, stdErr) <-
-        readProcessWithExitCode "cabal" ["list-bin", appName] []
-    if exitCode == ExitSuccess 
-        then let path = rstrip stdOut
-             in copyFile path tExecutable
-        else putStrLn stdErr
-    -- no idea what is it and why do I need it
-    removeIfExists "cabal.project.local"
+    getCabalBuildPath appName >>=
+      \p → copyFile p tExecutable
+    cleanCabalLocal
 
   "install | install to system" ◉ [tExecutable] ∰
     cabal ["install", "--overwrite-policy=always"]
