@@ -2,48 +2,40 @@
 {-# LANGUAGE UnicodeSyntax #-}
 
 module Tracker
-  ( trackTask
+  ( finishTask
   , pauseTask
   , resumeTask
-  , finishTask
-
+  , trackTask
+  , finishAll
   , pauseAll
   , resumeAll
-  , finishAll
-
   , list
   ) where
-
-import           Prelude.Unicode
 
 import           Data.List
 import           Data.Maybe
 import           Data.Time
 
 import           System.Directory
-import           System.Environment.Executable (getExecutablePath)
 import           System.Exit
-import           System.FilePath               (takeDirectory, (</>))
-import           System.IO
-import           System.Time.Utils             (renderSecs)
+import           System.FilePath               ((</>))
 
-import           Control.Applicative
 import           Control.Monad
 
+import           Helper
 import           IO
 import           Time
-import           Helper
 
 trackFile ∷ Int → String → IO ()
 trackFile η startDate = do
-  (_, trackFile) ← getTrack η
-  trackYaml ← startTrack trackFile
+  (_, trackingFile) ← getTrack η
+  trackYaml ← startTrack trackingFile
   let trackStart =
         trackYaml { start = startDate
                   , pause = Nothing
                   , tracked = Nothing
                   }
-  yEncode trackFile trackStart
+  yEncode trackingFile trackStart
 
 iterateTasks ∷ ((String, String) → IO ()) → IO ()
 iterateTasks action = do

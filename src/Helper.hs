@@ -2,11 +2,11 @@
 {-# LANGUAGE UnicodeSyntax #-}
 
 module Helper
-  ( getTrack
+  ( module Track
+  , getTrack
   , getWorkDir
-  , startTrack
   , openTrack
-  , module Track
+  , startTrack
   ) where
 
 import           Prelude.Unicode
@@ -15,9 +15,6 @@ import           System.Directory
 import           System.Environment.Executable (getExecutablePath)
 import           System.FilePath               (takeDirectory, (</>))
 import           System.Info                   (os)
-
-import           Control.Applicative
-import           Control.Monad
 
 import           Track
 

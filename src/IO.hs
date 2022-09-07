@@ -16,5 +16,5 @@ waitForKeyPress ∷ IO ()
 waitForKeyPress = do
   res ← stdin `ifReadyDo` getChar
   case res of
-    Just _ → return ()
+    Just _  → return ()
     Nothing → waitForKeyPress

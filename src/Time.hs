@@ -8,15 +8,7 @@ module Time
   , humanReadableTimeDiff
   ) where
 
-import           Prelude.Unicode
-
-import           Data.Char         (isSpace)
-import           Data.List
 import           Data.Time
-
-import           System.Exit
-import           System.IO
-import           System.Time.Utils (renderSecs)
 
 diffTime ∷ ZonedTime → IO NominalDiffTime
 diffTime c1 = do
@@ -38,9 +30,6 @@ humanReadableTimeDiff = helper
   weeks ∷ NominalDiffTime → Double
   weeks   n = days n / 7
 
-  years ∷ NominalDiffTime → Double
-  years   n = days n / 365
-
   i2s ∷ RealFrac α ⇒ α → String
   i2s !n = show m
     where m ∷ Int
@@ -55,9 +44,6 @@ humanReadableTimeDiff = helper
   i2sh !n = show m
     where m ∷ Int
           m = truncate n `mod` 24
-
-  trim = ζ . ζ
-    where ζ = reverse . dropWhile isSpace
 
   helper !d | d < 1          = "one second"
             | d < 60         = i2s d ++ " seconds"

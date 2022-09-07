@@ -2,9 +2,9 @@
 {-# LANGUAGE UnicodeSyntax #-}
 
 module Version
-  ( showMyV
+  ( showHelp
+  , showMyV
   , showV
-  , showHelp
   ) where
 
 import           Text.Printf
@@ -19,7 +19,7 @@ showMyV     ∷ String
 showMyV      = showVersion My.version
 
 showV       ∷ ∀ τ β. τ → IO β
-showV _      = printf (showMyV ++ "\n") >> exitSuccess
+showV _      = putStrLn ("t v" ++ showMyV) >> exitSuccess
 
 showHelp    ∷ ∀ τ β α. [OptDescr α] → τ → IO β
 showHelp o _ = putStrLn (usageInfo "Usage: t [optional things]" o)

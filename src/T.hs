@@ -3,19 +3,11 @@
 {-# LANGUAGE UnicodeSyntax  #-}
 
 import           System.Console.GetOpt
-import           System.Directory
-import           System.Environment    (getArgs)
+import           System.Environment (getArgs)
 import           System.Exit
-import           System.Info           (os)
-import           System.IO
 
-import           Control.Applicative
-import           Control.Concurrent
-import           Control.Exception
 import           Control.Monad.Unicode
-
-import           Data.Foldable.Unicode
-import           Foreign.Storable      (sizeOf)
+import           Data.Kind
 
 import           Version
 import           Tracker
@@ -49,16 +41,16 @@ options = [
   Option "F" []          (NoArg getF) "finish all tasks (in case you've forgot starting)"
   ]
 
-gett ∷ ∀ (μ :: * → *). Monad μ ⇒ String → Options → μ Options
+gett ∷ ∀ (μ :: Type → Type). Monad μ ⇒ String → Options → μ Options
 gett arg ο = return ο { optTrack = trackTask (read arg) }
 
-getp ∷ ∀ (μ :: * → *). Monad μ ⇒ String → Options → μ Options
+getp ∷ ∀ (μ :: Type → Type). Monad μ ⇒ String → Options → μ Options
 getp arg ο = return ο { optTrack = pauseTask (read arg) }
 
-getr ∷ ∀ (μ :: * → *). Monad μ ⇒ String → Options → μ Options
+getr ∷ ∀ (μ :: Type → Type). Monad μ ⇒ String → Options → μ Options
 getr arg ο = return ο { optTrack = resumeTask (read arg) }
 
-getf ∷ ∀ (μ :: * → *). Monad μ ⇒ String → Options → μ Options
+getf ∷ ∀ (μ :: Type → Type). Monad μ ⇒ String → Options → μ Options
 getf arg ο = return ο { optTrack = finishTask (read arg) }
 
 getL ∷ ∀ τ β. τ → IO β

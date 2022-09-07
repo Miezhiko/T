@@ -1,28 +1,28 @@
-{-# LANGUAGE DeriveGeneric     #-}
-{-# LANGUAGE UnicodeSyntax     #-}
+{-# LANGUAGE DeriveGeneric #-}
+{-# LANGUAGE UnicodeSyntax #-}
 
 module Track
-  ( Track(..)
-  , FromJSON
+  ( FromJSON
   , ToJSON
+  , Track (..)
   , yDecode
   , yEncode
   ) where
 
 import           GHC.Generics
 
-import           Data.Yaml
 import           Data.Aeson.Types            (defaultOptions, genericToJSON)
-
-import           Control.Applicative
-import           Control.Applicative.Unicode
+import           Data.Yaml
 
 import qualified Data.ByteString.Char8       as BS
 
-data Track = Track { tracked ∷ Maybe String
-                   , start   ∷ String
-                   , pause   ∷ Maybe String
-                   } deriving (Show, Generic)
+data Track
+  = Track
+      { tracked :: Maybe String
+      , start   :: String
+      , pause   :: Maybe String
+      }
+  deriving (Generic, Show)
 
 instance FromJSON Track
 instance ToJSON Track where
