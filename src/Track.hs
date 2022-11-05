@@ -11,10 +11,12 @@ module Track
 
 import           GHC.Generics
 
-import           Data.Aeson.Types            (defaultOptions, genericToJSON)
+import           Data.Aeson.Types      (defaultOptions, genericToJSON)
 import           Data.Yaml
 
-import qualified Data.ByteString.Char8       as BS
+import           Control.Monad         ((<=<))
+
+import qualified Data.ByteString.Char8 as BS
 
 data Track
   = Track
@@ -29,9 +31,7 @@ instance ToJSON Track where
   toJSON = genericToJSON defaultOptions
 
 yDecode ∷ FromJSON iFromJSONable ⇒ FilePath → IO iFromJSONable
-yDecode fName = do
-  ymlData ← BS.readFile fName
-  decodeThrow ymlData
+yDecode = decodeThrow <=< BS.readFile
 
 yEncode ∷ ToJSON iToJSONable ⇒ FilePath → iToJSONable → IO()
-yEncode fName δ = BS.writeFile fName $ encode δ
+yEncode = (. encode) . BS.writeFile

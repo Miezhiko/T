@@ -7,8 +7,6 @@ module Version
   , showV
   ) where
 
-import           Text.Printf
-
 import           System.Console.GetOpt
 import           System.Exit
 

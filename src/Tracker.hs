@@ -2,14 +2,14 @@
 {-# LANGUAGE UnicodeSyntax #-}
 
 module Tracker
-  ( finishTask
+  ( finishAll
+  , finishTask
+  , list
+  , pauseAll
   , pauseTask
+  , resumeAll
   , resumeTask
   , trackTask
-  , finishAll
-  , pauseAll
-  , resumeAll
-  , list
   ) where
 
 import           Data.List
@@ -18,7 +18,7 @@ import           Data.Time
 
 import           System.Directory
 import           System.Exit
-import           System.FilePath               ((</>))
+import           System.FilePath  ((</>))
 
 import           Control.Monad
 
