@@ -1,7 +1,9 @@
-{-# LANGUAGE BangPatterns        #-}
-{-# LANGUAGE RankNTypes          #-}
-{-# LANGUAGE ScopedTypeVariables #-}
-{-# LANGUAGE UnicodeSyntax       #-}
+{-# LANGUAGE
+    BangPatterns
+  , RankNTypes
+  , ScopedTypeVariables
+  , UnicodeSyntax
+  #-}
 
 module Time
   ( diffTime
@@ -13,7 +15,7 @@ import           Data.Time
 diffTime ∷ ZonedTime → IO NominalDiffTime
 diffTime c1 = do
   c2 ← getCurrentTime
-  return $ diffUTCTime c2 (zonedTimeToUTC c1)
+  pure $ diffUTCTime c2 (zonedTimeToUTC c1)
 
 humanReadableTimeDiff ∷ NominalDiffTime → String
 humanReadableTimeDiff = helper

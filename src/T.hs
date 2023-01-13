@@ -1,6 +1,8 @@
-{-# LANGUAGE KindSignatures #-}
-{-# LANGUAGE RankNTypes     #-}
-{-# LANGUAGE UnicodeSyntax  #-}
+{-# LANGUAGE
+    KindSignatures
+  , RankNTypes
+  , UnicodeSyntax
+  #-}
 
 import           System.Console.GetOpt
 import           System.Environment (getArgs)
@@ -15,7 +17,7 @@ import           Tracker
 main ∷ IO ()
 main = do (actions, _, _) ← getOpt RequireOrder options <$> getArgs
           Options { optTrack = tracking
-                  } ← foldl (≫=) (return defaultOptions) actions
+                  } ← foldl (≫=) (pure defaultOptions) actions
           tracking
 
 newtype Options = Options
@@ -42,16 +44,16 @@ options = [
   ]
 
 gett ∷ ∀ (μ :: Type → Type). Monad μ ⇒ String → Options → μ Options
-gett arg ο = return ο { optTrack = trackTask (read arg) }
+gett arg ο = pure ο { optTrack = trackTask (read arg) }
 
 getp ∷ ∀ (μ :: Type → Type). Monad μ ⇒ String → Options → μ Options
-getp arg ο = return ο { optTrack = pauseTask (read arg) }
+getp arg ο = pure ο { optTrack = pauseTask (read arg) }
 
 getr ∷ ∀ (μ :: Type → Type). Monad μ ⇒ String → Options → μ Options
-getr arg ο = return ο { optTrack = resumeTask (read arg) }
+getr arg ο = pure ο { optTrack = resumeTask (read arg) }
 
 getf ∷ ∀ (μ :: Type → Type). Monad μ ⇒ String → Options → μ Options
-getf arg ο = return ο { optTrack = finishTask (read arg) }
+getf arg ο = pure ο { optTrack = finishTask (read arg) }
 
 getL ∷ ∀ τ β. τ → IO β
 getL _ = list >> exitSuccess

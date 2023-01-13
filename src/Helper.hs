@@ -1,5 +1,7 @@
-{-# LANGUAGE MultiWayIf    #-}
-{-# LANGUAGE UnicodeSyntax #-}
+{-# LANGUAGE
+    MultiWayIf
+  , UnicodeSyntax
+  #-}
 
 module Helper
   ( module Track
@@ -33,22 +35,22 @@ getWorkDir =
 
 getTrack ∷ Int → IO (String, FilePath)
 getTrack η = getWorkDir >>= \ω →
-                return (τ, ω </> τ)
+                pure (τ, ω </> τ)
  where τ ∷ String
        τ = "task-" ++ show η
 
 startTrack ∷ String → IO Track
 startTrack trackFile =
   condM [ (doesFileExist trackFile, yDecode trackFile ∷ IO Track)
-        , ( return True
-          , return Track { tracked = Nothing
-                         , start = "0"
-                         , pause = Nothing
-                         })]
+        , ( pure True
+          , pure Track { tracked = Nothing
+                       , start = "0"
+                       , pause = Nothing
+                       })]
 
 openTrack ∷ String → IO (Maybe Track)
 openTrack trackFile =
   condM [ (doesFileExist trackFile
          , Just <$> (yDecode trackFile ∷ IO Track))
-         , ( return True
-           , return Nothing)]
+         , ( pure True
+           , pure Nothing)]

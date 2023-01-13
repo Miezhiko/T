@@ -1,5 +1,7 @@
-{-# LANGUAGE RankNTypes    #-}
-{-# LANGUAGE UnicodeSyntax #-}
+{-# LANGUAGE
+    RankNTypes
+  , UnicodeSyntax
+  #-}
 
 module IO
   ( waitForKeyPress
@@ -10,11 +12,11 @@ import           System.IO
 ifReadyDo ∷ Handle → IO α → IO (Maybe α)
 ifReadyDo θ χ = hReady θ >>= ζ
    where ζ True = fmap Just χ
-         ζ _    = return Nothing
+         ζ _    = pure Nothing
 
 waitForKeyPress ∷ IO ()
 waitForKeyPress = do
   res ← stdin `ifReadyDo` getChar
   case res of
-    Just _  → return ()
+    Just _  → pure ()
     Nothing → waitForKeyPress

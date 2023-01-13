@@ -1,5 +1,7 @@
-{-# LANGUAGE RankNTypes    #-}
-{-# LANGUAGE UnicodeSyntax #-}
+{-# LANGUAGE
+    RankNTypes
+  , UnicodeSyntax
+  #-}
 
 module Tracker
   ( finishAll
@@ -99,12 +101,12 @@ resumeT (t,p) = do
 getTotalTracked ∷ Track → IO NominalDiffTime
 getTotalTracked cfg = do
   difft ← case pause cfg of
-      Just _  → return 0
+      Just _  → pure 0
       Nothing → diffTime c1
   let diffInPicos  = fromEnum difft
       totalTracked =
         toEnum (diffInPicos + trackedTime) :: NominalDiffTime
-  return totalTracked
+  pure totalTracked
  where startDate ∷ String
        startDate = start cfg
        trackedTime ∷ Int
