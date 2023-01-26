@@ -1,5 +1,5 @@
 name: T
-version: 0.0.5
+version: 0.0.6
 license: AGPL3
 
 build-type: Simple
@@ -30,6 +30,8 @@ Executable t
     , executable-path
     , yaml
     , aeson
+    , time-parsers
+    , parsec
  ghc-options:
     -Wall
 

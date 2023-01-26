@@ -17,12 +17,15 @@ module Tracker
 import           Data.List
 import           Data.Maybe
 import           Data.Time
+import           Data.Time.Parsers
 
 import           System.Directory
 import           System.Exit
-import           System.FilePath  ((</>))
+import           System.FilePath   ((</>))
 
 import           Control.Monad
+
+import           Text.Parsec
 
 import           Helper
 import           IO
@@ -63,25 +66,28 @@ trackTask η = do
             putStrLn $ humanReadableTimeDiff diff
 
 pauseT ∷ (String, String) → IO ()
-pauseT (t,p) = do
+pauseT (t, p) = do
   trackYaml ← openTrack p
   case trackYaml of
     Nothing    → exitFailure
     Just yaml  → do
       pauseDate ← getZonedTime
-      let startDate = read $ start yaml :: ZonedTime
-          currentTracked = fromMaybe "0" (tracked yaml)
-          currentTime = read currentTracked :: Int
-      difft ← diffTime startDate
-      let diff = fromEnum difft :: Int
-          total = show $ diff + currentTime
-          pauseString = show pauseDate
-          trackStart  =
-            yaml { pause = Just pauseString
-                 , tracked = Just total
-                 }
-      putStrLn $ t ++ " paused at " ++ pauseString
-      yEncode p trackStart
+      let startDateParsed = parse zonedTime "" $ start yaml
+      case startDateParsed of
+        Left e    -> putStrLn $ "Error parsing start time " ++ show e
+        Right c1  -> do
+          let currentTracked = fromMaybe "0" (tracked yaml)
+              currentTime = read currentTracked :: Int
+          difft ← diffTime c1
+          let diff = fromEnum difft :: Int
+              total = show $ diff + currentTime
+              pauseString = show pauseDate
+              trackStart  =
+                yaml { pause = Just pauseString
+                     , tracked = Just total
+                     }
+          putStrLn $ t ++ " paused at " ++ pauseString
+          yEncode p trackStart
 
 resumeT ∷ (String, String) → IO ()
 resumeT (t,p) = do
@@ -99,14 +105,19 @@ resumeT (t,p) = do
       yEncode p trackStart
 
 getTotalTracked ∷ Track → IO NominalDiffTime
-getTotalTracked cfg = do
-  difft ← case pause cfg of
-      Just _  → pure 0
-      Nothing → diffTime c1
-  let diffInPicos  = fromEnum difft
-      totalTracked =
-        toEnum (diffInPicos + trackedTime) :: NominalDiffTime
-  pure totalTracked
+getTotalTracked cfg =
+   case startParsed of
+    Left e    -> do
+      putStrLn $ "Error parsing start time " ++ show e
+      pure 0
+    Right c1  -> do
+      difft ← case pause cfg of
+          Just _  → pure 0
+          Nothing → diffTime c1
+      let diffInPicos  = fromEnum difft
+          totalTracked =
+            toEnum (diffInPicos + trackedTime) :: NominalDiffTime
+      pure totalTracked
  where startDate ∷ String
        startDate = start cfg
        trackedTime ∷ Int
@@ -114,8 +125,8 @@ getTotalTracked cfg = do
          case tracked cfg of
            Just t  → read t :: Int
            Nothing → 0
-       c1 ∷ ZonedTime
-       c1 = read startDate :: ZonedTime
+       startParsed ∷ Either ParseError ZonedTime
+       startParsed = parse zonedTime "" startDate
 
 finishT ∷ Bool → (String, String) → IO ()
 finishT remove (t,p) = do
