@@ -20,26 +20,26 @@ import           System.Info                   (os)
 
 import           Track
 
-condM ∷ Monad μ ⇒ [(μ Bool, μ α)] → μ α
+condM ∷ Monad μ => [(μ Bool, μ α)] -> μ α
 condM [] = error "condM: no matching conditions"
 condM ((test, action) : rest) =
-  test >>= \τ → if τ then action
-                     else condM rest
+  test >>= \τ -> if τ then action
+                      else condM rest
 
 getWorkDir ∷ IO FilePath
 getWorkDir =
   {- HLINT ignore "Redundant multi-way if" -}
-  if | os ∈ ["win32", "mingw32", "cygwin32"] →
+  if | os ∈ ["win32", "mingw32", "cygwin32"] ->
         (takeDirectory <$> getExecutablePath)
-     | otherwise → getHomeDirectory
+     | otherwise -> getHomeDirectory
 
-getTrack ∷ Int → IO (String, FilePath)
-getTrack η = getWorkDir >>= \ω →
-                pure (τ, ω </> τ)
+getTrack ∷ Int -> IO (String, FilePath)
+getTrack η = getWorkDir >>= \ω ->
+               pure (τ, ω </> τ)
  where τ ∷ String
        τ = "task-" ++ show η
 
-startTrack ∷ String → IO Track
+startTrack ∷ String -> IO Track
 startTrack trackFile =
   condM [ (doesFileExist trackFile, yDecode trackFile ∷ IO Track)
         , ( pure True
@@ -48,7 +48,7 @@ startTrack trackFile =
                        , pause = Nothing
                        })]
 
-openTrack ∷ String → IO (Maybe Track)
+openTrack ∷ String -> IO (Maybe Track)
 openTrack trackFile =
   condM [ (doesFileExist trackFile
          , Just <$> (yDecode trackFile ∷ IO Track))

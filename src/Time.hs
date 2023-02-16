@@ -12,37 +12,37 @@ module Time
 
 import           Data.Time
 
-diffTime ∷ ZonedTime → IO NominalDiffTime
+diffTime ∷ ZonedTime -> IO NominalDiffTime
 diffTime c1 = do
-  c2 ← getCurrentTime
+  c2 <- getCurrentTime
   pure $ diffUTCTime c2 (zonedTimeToUTC c1)
 
-humanReadableTimeDiff ∷ NominalDiffTime → String
+humanReadableTimeDiff ∷ NominalDiffTime -> String
 humanReadableTimeDiff = helper
  where
-  minutes ∷ NominalDiffTime → Double
+  minutes ∷ NominalDiffTime -> Double
   minutes n = realToFrac $ n / 60
 
-  hours ∷ NominalDiffTime → Double
+  hours ∷ NominalDiffTime -> Double
   hours   n = minutes n / 60
 
-  days ∷ NominalDiffTime → Double
+  days ∷ NominalDiffTime -> Double
   days    n = hours n / 24
 
-  weeks ∷ NominalDiffTime → Double
+  weeks ∷ NominalDiffTime -> Double
   weeks   n = days n / 7
 
-  i2s ∷ RealFrac α ⇒ α → String
+  i2s ∷ RealFrac α => α -> String
   i2s !n = show m
     where m ∷ Int
           m = truncate n
 
-  i2sm ∷ RealFrac α ⇒ α → String
+  i2sm ∷ RealFrac α => α -> String
   i2sm !n = show m
     where m ∷ Int
           m = truncate n `mod` 60
 
-  i2sh ∷ RealFrac α ⇒ α → String
+  i2sh ∷ RealFrac α => α -> String
   i2sh !n = show m
     where m ∷ Int
           m = truncate n `mod` 24

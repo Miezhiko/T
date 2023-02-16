@@ -32,8 +32,8 @@ instance FromJSON Track
 instance ToJSON Track where
   toJSON = genericToJSON defaultOptions
 
-yDecode ∷ FromJSON iFromJSONable ⇒ FilePath → IO iFromJSONable
+yDecode ∷ FromJSON iFromJSONable => FilePath -> IO iFromJSONable
 yDecode = decodeThrow <=< BS.readFile
 
-yEncode ∷ ToJSON iToJSONable ⇒ FilePath → iToJSONable → IO()
+yEncode ∷ ToJSON iToJSONable => FilePath -> iToJSONable -> IO()
 yEncode = (. encode) . BS.writeFile

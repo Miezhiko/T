@@ -15,9 +15,9 @@ import           Version
 import           Tracker
 
 main ∷ IO ()
-main = do (actions, _, _) ← getOpt RequireOrder options <$> getArgs
+main = do (actions, _, _) <- getOpt RequireOrder options <$> getArgs
           Options { optTrack = tracking
-                  } ← foldl (≫=) (pure defaultOptions) actions
+                  } <- foldl (≫=) (pure defaultOptions) actions
           tracking
 
 newtype Options = Options
@@ -29,7 +29,7 @@ defaultOptions = Options {
   optTrack = trackTask 0
   }
 
-options ∷ [OptDescr (Options → IO Options)]
+options ∷ [OptDescr (Options -> IO Options)]
 options = [
   Option "v" ["version"] (NoArg showV) "Display Version",
   Option "h" ["help"]    (NoArg (showHelp options)) "Display Help",
@@ -43,26 +43,26 @@ options = [
   Option "F" []          (NoArg getF) "finish all tasks (in case you've forgot starting)"
   ]
 
-gett ∷ ∀ (μ :: Type → Type). Monad μ ⇒ String → Options → μ Options
+gett ∷ ∀ (μ :: Type -> Type). Monad μ => String -> Options -> μ Options
 gett arg ο = pure ο { optTrack = trackTask (read arg) }
 
-getp ∷ ∀ (μ :: Type → Type). Monad μ ⇒ String → Options → μ Options
+getp ∷ ∀ (μ :: Type -> Type). Monad μ => String -> Options -> μ Options
 getp arg ο = pure ο { optTrack = pauseTask (read arg) }
 
-getr ∷ ∀ (μ :: Type → Type). Monad μ ⇒ String → Options → μ Options
+getr ∷ ∀ (μ :: Type -> Type). Monad μ => String -> Options -> μ Options
 getr arg ο = pure ο { optTrack = resumeTask (read arg) }
 
-getf ∷ ∀ (μ :: Type → Type). Monad μ ⇒ String → Options → μ Options
+getf ∷ ∀ (μ :: Type -> Type). Monad μ => String -> Options -> μ Options
 getf arg ο = pure ο { optTrack = finishTask (read arg) }
 
-getL ∷ ∀ τ β. τ → IO β
+getL ∷ ∀ τ β. τ -> IO β
 getL _ = list >> exitSuccess
 
-getP ∷ ∀ τ β. τ → IO β
+getP ∷ ∀ τ β. τ -> IO β
 getP _ = pauseAll >> exitSuccess
 
-getR ∷ ∀ τ β. τ → IO β
+getR ∷ ∀ τ β. τ -> IO β
 getR _ = resumeAll >> exitSuccess
 
-getF ∷ ∀ τ β. τ → IO β
+getF ∷ ∀ τ β. τ -> IO β
 getF _ = finishAll >> exitSuccess

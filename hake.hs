@@ -13,7 +13,7 @@ main = hake $ do
     cabal ["configure"]
     cabal ["build"]
     getCabalBuildPath appName >>=
-      \p → copyFile p tExecutable
+      \p -> copyFile p tExecutable
     cleanCabalLocal
 
   "install | install to system" ◉ [tExecutable] ∰
@@ -33,5 +33,5 @@ main = hake $ do
   tExecutable ∷ String
   tExecutable =
     {- HLINT ignore "Redundant multi-way if" -}
-    if | os ∈ ["win32", "mingw32", "cygwin32"] → buildPath </> appName ++ "exe"
-       | otherwise → buildPath </> appName
+    if | os ∈ ["win32", "mingw32", "cygwin32"] -> buildPath </> appName ++ "exe"
+       | otherwise -> buildPath </> appName

@@ -31,10 +31,10 @@ import           Helper
 import           IO
 import           Time
 
-trackFile ∷ Int → String → IO ()
+trackFile ∷ Int -> String -> IO ()
 trackFile η startDate = do
-  (_, trackingFile) ← getTrack η
-  trackYaml ← startTrack trackingFile
+  (_, trackingFile) <- getTrack η
+  trackYaml <- startTrack trackingFile
   let trackStart =
         trackYaml { start = startDate
                   , pause = Nothing
@@ -42,17 +42,17 @@ trackFile η startDate = do
                   }
   yEncode trackingFile trackStart
 
-iterateTasks ∷ ((String, String) → IO ()) → IO ()
+iterateTasks ∷ ((String, String) -> IO ()) -> IO ()
 iterateTasks action = do
-  workDir ← getWorkDir
-  content ← getDirectoryContents workDir
+  workDir <- getWorkDir
+  content <- getDirectoryContents workDir
   let tasks = filter (isPrefixOf "task-") content
-      abslt = map (\t → (t, workDir </> t)) tasks
+      abslt = map (\t -> (t, workDir </> t)) tasks
   forM_ abslt action
 
-trackTask ∷ Int → IO ()
+trackTask ∷ Int -> IO ()
 trackTask η = do
-  c1 ← getZonedTime
+  c1 <- getZonedTime
   let dateString = show c1
   putStrLn dateString
   if η /= 0
@@ -62,23 +62,23 @@ trackTask η = do
     else do putStrLn "Press any key to stop tracking"
             waitForKeyPress
             putStr "Tracked "
-            diff ← diffTime c1
+            diff <- diffTime c1
             putStrLn $ humanReadableTimeDiff diff
 
-pauseT ∷ (String, String) → IO ()
+pauseT ∷ (String, String) -> IO ()
 pauseT (t, p) = do
-  trackYaml ← openTrack p
+  trackYaml <- openTrack p
   case trackYaml of
-    Nothing    → exitFailure
-    Just yaml  → do
-      pauseDate ← getZonedTime
+    Nothing    -> exitFailure
+    Just yaml  -> do
+      pauseDate <- getZonedTime
       let startDateParsed = parse zonedTime "" $ start yaml
       case startDateParsed of
         Left e    -> putStrLn $ "Error parsing start time " ++ show e
         Right c1  -> do
           let currentTracked = fromMaybe "0" (tracked yaml)
               currentTime = read currentTracked :: Int
-          difft ← diffTime c1
+          difft <- diffTime c1
           let diff = fromEnum difft :: Int
               total = show $ diff + currentTime
               pauseString = show pauseDate
@@ -89,13 +89,13 @@ pauseT (t, p) = do
           putStrLn $ t ++ " paused at " ++ pauseString
           yEncode p trackStart
 
-resumeT ∷ (String, String) → IO ()
+resumeT ∷ (String, String) -> IO ()
 resumeT (t,p) = do
-  trackYaml ← openTrack p
+  trackYaml <- openTrack p
   case trackYaml of
-    Nothing    → exitFailure
-    Just yaml  → do
-      resumeDate ← getZonedTime
+    Nothing    -> exitFailure
+    Just yaml  -> do
+      resumeDate <- getZonedTime
       let resumeString = show resumeDate
           trackStart =
             yaml { pause = Nothing
@@ -104,16 +104,16 @@ resumeT (t,p) = do
       putStrLn $ t ++ " resumed at " ++ resumeString
       yEncode p trackStart
 
-getTotalTracked ∷ Track → IO NominalDiffTime
+getTotalTracked ∷ Track -> IO NominalDiffTime
 getTotalTracked cfg =
    case startParsed of
     Left e    -> do
       putStrLn $ "Error parsing start time " ++ show e
       pure 0
     Right c1  -> do
-      difft ← case pause cfg of
-          Just _  → pure 0
-          Nothing → diffTime c1
+      difft <- case pause cfg of
+          Just _  -> pure 0
+          Nothing -> diffTime c1
       let diffInPicos  = fromEnum difft
           totalTracked =
             toEnum (diffInPicos + trackedTime) :: NominalDiffTime
@@ -123,29 +123,29 @@ getTotalTracked cfg =
        trackedTime ∷ Int
        trackedTime =
          case tracked cfg of
-           Just t  → read t :: Int
-           Nothing → 0
+           Just t  -> read t :: Int
+           Nothing -> 0
        startParsed ∷ Either ParseError ZonedTime
        startParsed = parse zonedTime "" startDate
 
-finishT ∷ Bool → (String, String) → IO ()
+finishT ∷ Bool -> (String, String) -> IO ()
 finishT remove (t,p) = do
-  trackYaml ← openTrack p
+  trackYaml <- openTrack p
   case trackYaml of
-    Nothing    → exitFailure
-    Just yaml  → do
-      totalTracked ← getTotalTracked yaml
+    Nothing    -> exitFailure
+    Just yaml  -> do
+      totalTracked <- getTotalTracked yaml
       putStr $ "* " ++ t ++ " : "
       putStrLn $ humanReadableTimeDiff totalTracked
       when remove $ removeFile p
 
-pauseTask ∷ Int → IO ()
+pauseTask ∷ Int -> IO ()
 pauseTask η = pauseT =<< getTrack η
 
-resumeTask ∷ Int → IO ()
+resumeTask ∷ Int -> IO ()
 resumeTask η = resumeT =<< getTrack η
 
-finishTask ∷ Int → IO ()
+finishTask ∷ Int -> IO ()
 finishTask η = finishT True =<< getTrack η
 
 list ∷ IO ()
