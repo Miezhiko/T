@@ -1,5 +1,5 @@
 name: T
-version: 0.0.7
+version: 0.0.8
 license: AGPL3
 
 build-type: Simple
@@ -21,7 +21,6 @@ Executable t
       base >= 4
     , base-unicode-symbols
     , time
-    , MissingH
     , lifted-base
     , bytestring
     , utf8-string
@@ -34,4 +33,3 @@ Executable t
     , parsec
  ghc-options:
     -Wall
-
